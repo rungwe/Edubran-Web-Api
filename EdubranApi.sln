@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdubranApi", "EdubranApi\EdubranApi.csproj", "{04FF1262-B6A7-4D07-B7A4-DB1A6D86AABD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EdubranApi.Tests", "EdubranApi.Tests\EdubranApi.Tests.csproj", "{8D06CCD2-A4FA-4EA5-97CA-20DF94D5A3E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04FF1262-B6A7-4D07-B7A4-DB1A6D86AABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04FF1262-B6A7-4D07-B7A4-DB1A6D86AABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04FF1262-B6A7-4D07-B7A4-DB1A6D86AABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04FF1262-B6A7-4D07-B7A4-DB1A6D86AABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D06CCD2-A4FA-4EA5-97CA-20DF94D5A3E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D06CCD2-A4FA-4EA5-97CA-20DF94D5A3E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D06CCD2-A4FA-4EA5-97CA-20DF94D5A3E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D06CCD2-A4FA-4EA5-97CA-20DF94D5A3E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
