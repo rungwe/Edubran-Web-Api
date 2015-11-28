@@ -11,10 +11,12 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using EdubranApi.Models;
 using Microsoft.AspNet.Identity;
+using System.Reflection;
 
 namespace EdubranApi.Controllers
 {
     [RoutePrefix("api/Students")]
+    [Authorize]
     public class StudentsController : ApiController
     {
         private EdubranApiContext db = new EdubranApiContext();
@@ -53,7 +55,7 @@ namespace EdubranApi.Controllers
         [HttpGet]
         public IQueryable<StudentDTO> GetStudentsByCategory(string category)
         {
-            var students = from b in db.Students.Include(b => b.Skills).Where(b=> b.category== category)
+            var students = from b in db.Students.Where(b=> b.category== category)
                            select new StudentDTO
                            {
                                student_number = b.Id,
@@ -70,9 +72,8 @@ namespace EdubranApi.Controllers
         }
 
 
-        // GET: api/Students/5
         /// <summary>
-        /// get student profile by Id
+        /// get student profile by Id, tested
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -101,7 +102,6 @@ namespace EdubranApi.Controllers
                 linkdn_url = b.linkdn,
                 email_address = b.email,
                 phone_number = b.phone,
-                student_skills = b.Skills,
                 transcripts = b.transcripts
 
             };
@@ -109,9 +109,9 @@ namespace EdubranApi.Controllers
         }
 
 
-        // GET: api/GetCurrentStudentProfile/5
+        
         /// <summary>
-        /// get current student profile
+        /// get current student profile, tested
         /// </summary>
         /// 
         /// <returns></returns>
@@ -123,7 +123,7 @@ namespace EdubranApi.Controllers
             string reg = User.Identity.GetUserId();
             StudentDetailedDTO student = null;
 
-            Student b = await db.Students.Include(d=> d.Skills).FirstAsync(d=> d.registrationId== reg);
+            Student b = await db.Students.Where(d=> d.registrationId==reg).SingleOrDefaultAsync();
             if (b == null)
             {
                 return NotFound();
@@ -145,7 +145,6 @@ namespace EdubranApi.Controllers
                     linkdn_url = b.linkdn,
                     email_address = b.email,
                     phone_number = b.phone,
-                    student_skills = b.Skills,
                     transcripts = b.transcripts
 
                 };
@@ -172,6 +171,16 @@ namespace EdubranApi.Controllers
                 return BadRequest(ModelState);
             }
 
+            string reg = User.Identity.GetUserId();
+
+            Student client = await db.Students.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+
+
             Student student = new Student()
             {
                 firstName= profile.first_name,
@@ -186,19 +195,20 @@ namespace EdubranApi.Controllers
                 phone = profile.phone_number,
                 wallpaper = profile.wall_paper,
                 linkdn = profile.profile_pic,
-                profilePic = profile.profile_pic
-
+                profilePic = profile.profile_pic,
+                Id = client.Id
             };
-            string reg = User.Identity.GetUserId();
-            
 
-            Student client = await db.Students.FirstAsync(b => b.registrationId == reg);
-            student.Id = client.Id;
+            foreach (PropertyInfo propertyInfo in client.GetType().GetProperties())
+            {
+                if (propertyInfo.GetValue(student, null) == null)
+                    propertyInfo.SetValue(student, propertyInfo.GetValue(client, null), null);
+            }
             
-            db.Entry(student).State = EntityState.Modified;
 
             try
             {
+                db.Entry(client).CurrentValues.SetValues(student);
                 await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -213,26 +223,10 @@ namespace EdubranApi.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return StatusCode(HttpStatusCode.OK);
         }
 
-        /**
-        // DELETE: api/Students/5
-        [ResponseType(typeof(Student))]
-        public async Task<IHttpActionResult> DeleteStudent(int id)
-        {
-            Student student = await db.Students.FindAsync(id);
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            db.Students.Remove(student);
-            await db.SaveChangesAsync();
-
-            return Ok(student);
-        }
-        **/
+        
 
         protected override void Dispose(bool disposing)
         {

@@ -40,8 +40,6 @@ namespace EdubranApi.Models
         [Required]
         public string institute { get; set; }
 
-        public ICollection<Skill> Skills { get; set; }
-
 
     }
 }

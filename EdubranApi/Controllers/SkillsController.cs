@@ -135,7 +135,7 @@ namespace EdubranApi.Controllers
 
         // POST: api/Skills
         [ResponseType(typeof(void))]
-        [Route("AddSkill")]
+        [Route("AddSkills")]
         [HttpPost]
         public async Task<IHttpActionResult> PostSkill(string[] skill_names)
         {

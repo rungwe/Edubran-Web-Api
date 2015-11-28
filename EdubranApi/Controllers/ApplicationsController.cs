@@ -52,6 +52,7 @@ namespace EdubranApi.Controllers
 
             db.Entry(application).State = EntityState.Modified;
 
+
             try
             {
                 await db.SaveChangesAsync();

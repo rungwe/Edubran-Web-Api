@@ -14,9 +14,14 @@ namespace EdubranApi.Models
         public int Id { get; set; }
         public string skill { get; set; }
 
-        [ForeignKey("Student")]
+        
         //Foreign key
         public int studentId { get; set; }
+
+        [ForeignKey("studentId")]
+        public Student student { get; set; }
+
+
 
 
     }

@@ -52,11 +52,19 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -216,39 +224,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510291548331_InitialCreate.cs" />
-    <Compile Include="Migrations\201510291548331_InitialCreate.Designer.cs">
-      <DependentUpon>201510291548331_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510301040249_Initial.cs" />
-    <Compile Include="Migrations\201510301040249_Initial.Designer.cs">
-      <DependentUpon>201510301040249_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510301102094_Initial1.cs" />
-    <Compile Include="Migrations\201510301102094_Initial1.Designer.cs">
-      <DependentUpon>201510301102094_Initial1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510301107357_Initial2.cs" />
-    <Compile Include="Migrations\201510301107357_Initial2.Designer.cs">
-      <DependentUpon>201510301107357_Initial2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510301113125_Initial3.cs" />
-    <Compile Include="Migrations\201510301113125_Initial3.Designer.cs">
-      <DependentUpon>201510301113125_Initial3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510301228046_Initial4.cs" />
-    <Compile Include="Migrations\201510301228046_Initial4.Designer.cs">
-      <DependentUpon>201510301228046_Initial4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510311942322_Initial5.cs" />
-    <Compile Include="Migrations\201510311942322_Initial5.Designer.cs">
-      <DependentUpon>201510311942322_Initial5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Application.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\CommentDTO.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\CompanyDTO.cs" />
     <Compile Include="Models\CompanyEditDTO.cs" />
@@ -339,29 +319,6 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510291548331_InitialCreate.resx">
-      <DependentUpon>201510291548331_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510301040249_Initial.resx">
-      <DependentUpon>201510301040249_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510301102094_Initial1.resx">
-      <DependentUpon>201510301102094_Initial1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510301107357_Initial2.resx">
-      <DependentUpon>201510301107357_Initial2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510301113125_Initial3.resx">
-      <DependentUpon>201510301113125_Initial3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510301228046_Initial4.resx">
-      <DependentUpon>201510301228046_Initial4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510311942322_Initial5.resx">
-      <DependentUpon>201510311942322_Initial5.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

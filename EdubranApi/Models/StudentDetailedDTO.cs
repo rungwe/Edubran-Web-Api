@@ -28,7 +28,6 @@ namespace EdubranApi.Models
         /// academic level, 1 means first year, 2 means second year etc
         /// </summary>
         public int level { get; set; }
-
-        public IEnumerable<Skill> student_skills { get; set; }
+        
     }
 }
