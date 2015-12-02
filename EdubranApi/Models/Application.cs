@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace EdubranApi.Models
 {
+    /// <summary>
+    /// Application Model
+    /// </summary>
     public class Application
     {
         [Key]
@@ -19,9 +23,16 @@ namespace EdubranApi.Models
 
         // Foreign key
         public int projectId { get; set; }
-        public int studentID { get; set; }
+        public int studentId { get; set; }
+        public int companyId { get; set; }
         //Navigation property
+        [ForeignKey("projectId")]
         public Project project { get; set; }
+
+        [ForeignKey("studentId")]
         public Student student { get; set; }
+
+        [ForeignKey("companyId")]
+        public Company company { get; set; }
     }
 }

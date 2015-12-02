@@ -15,6 +15,9 @@ using System.Reflection;
 
 namespace EdubranApi.Controllers
 {
+    /// <summary>
+    /// This controller handles all the requests associated with the student models
+    /// </summary>
     [RoutePrefix("api/Students")]
     [Authorize]
     public class StudentsController : ApiController
@@ -102,7 +105,8 @@ namespace EdubranApi.Controllers
                 linkdn_url = b.linkdn,
                 email_address = b.email,
                 phone_number = b.phone,
-                transcripts = b.transcripts
+                transcripts = b.transcripts,
+                application_num= b.application_number
 
             };
             return Ok(student);
@@ -145,7 +149,8 @@ namespace EdubranApi.Controllers
                     linkdn_url = b.linkdn,
                     email_address = b.email,
                     phone_number = b.phone,
-                    transcripts = b.transcripts
+                    transcripts = b.transcripts,
+                    application_num = b.application_number
 
                 };
             }
@@ -156,7 +161,7 @@ namespace EdubranApi.Controllers
 
         
         /// <summary>
-        /// Edit student profile
+        /// Edit current student profile, tested
         /// </summary>
         /// 
         /// <param name="profile"></param>
@@ -176,7 +181,7 @@ namespace EdubranApi.Controllers
             Student client = await db.Students.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
             if (client == null)
             {
-                return NotFound();
+                return StatusCode(HttpStatusCode.Forbidden);
             }
 
 

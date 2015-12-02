@@ -34,6 +34,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>App_Data/XmlDocument.xml</DocumentationFile>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -224,9 +226,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511291142233_Initial.cs" />
+    <Compile Include="Migrations\201511291142233_Initial.Designer.cs">
+      <DependentUpon>201511291142233_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512020739433_Initial1.cs" />
+    <Compile Include="Migrations\201512020739433_Initial1.Designer.cs">
+      <DependentUpon>201512020739433_Initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Application.cs" />
+    <Compile Include="Models\ApplicationCompanyDTO.cs" />
+    <Compile Include="Models\ApplicationDTO.cs" />
+    <Compile Include="Models\ApplicationPostDTO.cs" />
+    <Compile Include="Models\ApplicationStudentDTO.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\CommentDTO.cs" />
     <Compile Include="Models\Company.cs" />
@@ -237,6 +252,7 @@
     <Compile Include="Models\EdubranApiContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Project.cs" />
+    <Compile Include="Models\ProjectAppDTO.cs" />
     <Compile Include="Models\ProjectDetailDTO.cs" />
     <Compile Include="Models\ProjectDTO.cs" />
     <Compile Include="Models\ProjectEditDTO.cs" />
@@ -319,6 +335,14 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511291142233_Initial.resx">
+      <DependentUpon>201511291142233_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512020739433_Initial1.resx">
+      <DependentUpon>201512020739433_Initial1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

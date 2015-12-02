@@ -11,16 +11,25 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using EdubranApi.Models;
 using Microsoft.AspNet.Identity;
+using System.Reflection;
 
 namespace EdubranApi.Controllers
 {
+    /// <summary>
+    /// This controller handles all the url endpoints associated with companies
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/Companies")]
     public class CompaniesController : ApiController
     {
         private EdubranApiContext db = new EdubranApiContext();
 
-        // GET: api/Companies
+        // tested
+        
+        /// <summary>
+        /// retrieves all the companies in the system
+        /// </summary>
+        /// <returns></returns>
         [Route("GetAllCompanies")]
         [HttpGet]
         public IQueryable<CompanyDTO> GetCompanies()
@@ -36,7 +45,12 @@ namespace EdubranApi.Controllers
             return companies;
         }
 
-        // GET: api/Companies
+        //tested
+        /// <summary>
+        /// Retrieves companies by category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
         [Route("GetCompaniesByCategory")]
         [HttpGet]
         public IQueryable<CompanyDTO> GetCompaniesByCategory(string category)
@@ -53,14 +67,19 @@ namespace EdubranApi.Controllers
             return companies;
         }
 
+        // tested
         // GET: api/Companies/5
+        /// <summary>
+        /// Retrieves companies by their categories
+        /// </summary>
+        /// <returns>200non success and 404 if there are no companies</returns>
         [ResponseType(typeof(CompanyProfileDTO))]
-        [Route("GetCompanyProfile")]
+        [Route("GetCurrentCompanyProfile")]
         [HttpGet]
         public async Task<IHttpActionResult> GetCompany()
         {
             string reg = User.Identity.GetUserId();
-            Company company = await db.Companies.FirstAsync(b => b.registrationId == reg);
+            Company company = await db.Companies.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
             if (company == null)
             {
                 return NotFound();
@@ -88,6 +107,12 @@ namespace EdubranApi.Controllers
             return Ok(profile);
         }
 
+        // tested
+        /// <summary>
+        /// Retrieves company profile given the ID of the company
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ResponseType(typeof(CompanyProfileDTO))]
         [Route("GetCompanyProfileByID")]
         [HttpGet]
@@ -120,15 +145,25 @@ namespace EdubranApi.Controllers
         }
 
 
-
+        // tested
         // PUT: api/Companies/5
+        /// <summary>
+        /// Edit current company logged in profile
+        /// </summary>
+        /// <param name="company_edit"></param>
+        /// <returns>returns 200 on success</returns>
         [ResponseType(typeof(void))]
         [Route("EditCompany")]
         [HttpPut]
         public async Task<IHttpActionResult> PutCompany( CompanyEditDTO company_edit)
         {
             string reg = User.Identity.GetUserId();
-            Company owner = await db.Companies.FirstAsync(b => b.registrationId == reg);
+            Company owner = await db.Companies.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+
+            if (owner == null)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
             int owner_id = owner.Id;
             
             if (!ModelState.IsValid)
@@ -155,10 +190,15 @@ namespace EdubranApi.Controllers
                 lkdn_url = company_edit.linkdn
             };
 
-            db.Entry(company).State = EntityState.Modified;
+            foreach (PropertyInfo propertyInfo in owner.GetType().GetProperties())
+            {
+                if (propertyInfo.GetValue(company, null) == null)
+                    propertyInfo.SetValue(company, propertyInfo.GetValue(owner, null), null);
+            }
 
             try
             {
+                db.Entry(owner).CurrentValues.SetValues(company);
                 await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -177,23 +217,6 @@ namespace EdubranApi.Controllers
         }
 
         
-        /*
-        // DELETE: api/Companies/5
-        [ResponseType(typeof(Company))]
-        public async Task<IHttpActionResult> DeleteCompany(int id)
-        {
-            Company company = await db.Companies.FindAsync(id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            db.Companies.Remove(company);
-            await db.SaveChangesAsync();
-
-            return Ok(company);
-        }
-        **/
 
         protected override void Dispose(bool disposing)
         {

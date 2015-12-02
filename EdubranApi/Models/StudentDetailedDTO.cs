@@ -19,6 +19,7 @@ namespace EdubranApi.Models
         public string linkdn_url { get; set; }
         public int phone_number { get; set; }
         public string email_address { get; set; }
+        public int application_num { get; set; }
 
         /// <summary>
         /// name of the university or techknikon

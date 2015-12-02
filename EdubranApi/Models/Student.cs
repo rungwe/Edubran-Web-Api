@@ -34,6 +34,7 @@ namespace EdubranApi.Models
         /// academic level, 1 means first year, 2 means second year etc
         /// </summary>
         public int level { get; set; }
+        public int application_number { get; set; }
         public string transcripts { get; set; }
         public string cv { get; set; }
         public string linkdn { get; set; }

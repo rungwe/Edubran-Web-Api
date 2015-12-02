@@ -18,9 +18,16 @@ namespace EdubranApi.Controllers
         private EdubranApiContext db = new EdubranApiContext();
 
         // GET: api/Comments
-        public IQueryable<Comment> GetComments()
+        public IQueryable<CommentDTO> GetComments()
         {
-            return db.Comments;
+            var comments = from b in db.Comments
+                           select new CommentDTO
+                           {
+                               Id = b.Id,
+                               comment = b.comment,
+                               date = b.date
+                           };
+            return comments;
         }
 
         // GET: api/Comments/5

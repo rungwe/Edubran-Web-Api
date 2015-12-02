@@ -11,15 +11,20 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using EdubranApi.Models;
 using Microsoft.AspNet.Identity;
+using System.Reflection;
 
 namespace EdubranApi.Controllers
 {
+    /// <summary>
+    /// This controller manages projects, contains all the url endpoints which deals with projects
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/Projects")]
+   
     public class ProjectsController : ApiController
     {
         private EdubranApiContext db = new EdubranApiContext();
-
+        // needs pagination
         /// <summary>
         /// get all the projects from all companies and categories
         /// </summary>
@@ -55,6 +60,133 @@ namespace EdubranApi.Controllers
 
 
         }
+        /// <summary>
+        /// Retrieves the suggested project for the current logged in student, based on their category and academic level
+        /// </summary>
+        /// <returns>returns 200 on success and null on failure</returns>
+        [Route("GetSuggestedProjects")]
+        [HttpGet]
+        public IQueryable<ProjectDTO> GetSuggestedProjects()
+        {
+
+            string reg = User.Identity.GetUserId();
+
+            Student client = db.Students.Where(d => d.registrationId == reg).SingleOrDefault();
+            if (client == null)
+            {
+                return null;
+            }
+            var project = from b in db.Projects.Include(b => b.company).Where(b => b.category == client.category && b.audience == client.level)
+                          select new ProjectDTO
+                          {
+                              project_id = b.Id,
+                              project_title = b.title,
+                              project_status = b.status,
+                              project_category = b.category,
+                              targeted_level = b.audience,
+                              num_application = b.numApplication,
+                              num_comments = b.numComments,
+                              num_views = b.numViews,
+                              company = new CompanyDTO()
+                              {
+                                  companyID = b.company.Id,
+                                  name = b.company.companyName,
+                                  company_category = b.company.category,
+                                  profile_pic = b.company.profilePicture,
+                                  wall_pic = b.company.wallpaper
+                              }
+
+                          };
+
+            return project;
+
+
+        }
+
+        /// <summary>
+        /// get projects posted by a company by supplying the company id, if the company_id is not found returns null
+        /// </summary>
+        /// <param name="company_id"></param>
+        /// <returns></returns>
+        [Route("GetCompanyProjects")]
+        [HttpGet]
+        public IQueryable<ProjectDTO> GetCompanyProjects(int company_id)
+        {
+            Company company = db.Companies.Find(company_id);
+            if (company == null)
+            {
+                return null;
+            }
+            var project = from b in db.Projects.Include(b => b.company).Where(b=> b.companyId==company_id)
+                          select new ProjectDTO
+                          {
+                              project_id = b.Id,
+                              project_title = b.title,
+                              project_status = b.status,
+                              project_category = b.category,
+                              targeted_level = b.audience,
+                              num_application = b.numApplication,
+                              num_comments = b.numComments,
+                              num_views = b.numViews,
+                              company = new CompanyDTO()
+                              {
+                                  companyID = b.company.Id,
+                                  name = b.company.companyName,
+                                  company_category = b.company.category,
+                                  profile_pic = b.company.profilePicture,
+                                  wall_pic = b.company.wallpaper
+                              }
+
+                          };
+
+            return project;
+
+
+        }
+
+
+        /// <summary>
+        /// get projects posted by the current company logged in
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetCurrentCompanyProjects")]
+        [HttpGet]
+        public IQueryable<ProjectDTO> GetCurrentCompanyProjects()
+        {
+            string reg = User.Identity.GetUserId();
+
+            Company company = db.Companies.Where(d => d.registrationId == reg).SingleOrDefault(); 
+            if (company == null)
+            {
+                return null;
+            }
+            int company_id = company.Id;
+            var project = from b in db.Projects.Include(b => b.company).Where(b => b.companyId == company_id)
+                          select new ProjectDTO
+                          {
+                              project_id = b.Id,
+                              project_title = b.title,
+                              project_status = b.status,
+                              project_category = b.category,
+                              targeted_level = b.audience,
+                              num_application = b.numApplication,
+                              num_comments = b.numComments,
+                              num_views = b.numViews,
+                              company = new CompanyDTO()
+                              {
+                                  companyID = b.company.Id,
+                                  name = b.company.companyName,
+                                  company_category = b.company.category,
+                                  profile_pic = b.company.profilePicture,
+                                  wall_pic = b.company.wallpaper
+                              }
+
+                          };
+
+            return project;
+
+
+        }
 
 
         /// <summary>
@@ -62,7 +194,7 @@ namespace EdubranApi.Controllers
         /// </summary>
         /// <param name="category"></param>
         /// <returns>projects from a certain category</returns>
-        [Route("GetAllProjects")]
+        [Route("GetProjectsByCategory")]
         [HttpGet]
         public IQueryable<ProjectDTO> GetProjectByCategory(string category)
         {
@@ -93,7 +225,7 @@ namespace EdubranApi.Controllers
 
 
         /// <summary>
-        /// Get project by its id
+        /// Get project details by its id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -138,11 +270,11 @@ namespace EdubranApi.Controllers
         }
 
         /// <summary>
-        /// Edit a project
+        /// Edit a project given the project id and neccessary details to be edited
         /// </summary>
         /// <param name="id"></param>
         /// <param name="project_data"></param>
-        /// <returns>http code 204 on success, 403 when there is a privacy violation</returns>
+        /// <returns>http code 200 on success, 403 when there is a privacy violation</returns>
         
         [ResponseType(typeof(void))]
         [Route("EditProject")]
@@ -156,34 +288,42 @@ namespace EdubranApi.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (!ProjectExists(id))
+            {
+                return StatusCode(HttpStatusCode.NotFound);
+            }
+
             Company company = await db.Companies.FirstAsync(b => b.registrationId == reg);
             int company_id = company.Id;
+
             Project project = new Project()
             {
                 Id = id,
+                companyId = company_id,
                 title = project_data.project_title,
                 detailsText = project_data.description,
                 detailsResourceUrl = project_data.attachment,
                 audience = project_data.targeted_level,
                 category = project_data.project_category,
-                status = "function not implemented",
+                status = "open",
                 dueDate = project_data.due_date
             };
 
-            if (id != project.Id)
-            {
-                return BadRequest();
-            }
-            Project proj = await db.Projects.FindAsync(id);
-            if (proj.company.Id != company_id)
+            Project original_project = await db.Projects.FindAsync(id);
+            if (original_project.company.Id != company_id)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
 
-            db.Entry(project).State = EntityState.Modified;
+            foreach (PropertyInfo propertyInfo in original_project.GetType().GetProperties())
+            {
+                if (propertyInfo.GetValue(project, null) == null)
+                    propertyInfo.SetValue(project, propertyInfo.GetValue(original_project, null), null);
+            }
 
             try
             {
+                db.Entry(original_project).CurrentValues.SetValues(project);
                 await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -198,24 +338,29 @@ namespace EdubranApi.Controllers
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return StatusCode(HttpStatusCode.OK);
         }
 
         /// <summary>
-        /// Post a project
+        /// a method used by companies to post projects
         /// </summary>
-        /// <param name="company_id"></param>
         /// <param name="project_data"></param>
-        /// <returns></returns
+        /// <returns>200 on success</returns>
         [ResponseType(typeof(ProjectDetailDTO))]
-        [Route("PostProject")]
+        [Route("CreateProject")]
         [HttpPost]
-        public async Task<IHttpActionResult> PostProject(int company_id, ProjectPostDTO project_data)
+        public async Task<IHttpActionResult> CreateProject(ProjectPostDTO project_data)
         {
+
             string reg = User.Identity.GetUserId();
-            Company owner = await db.Companies.FirstAsync(b => b.registrationId == reg);
+            Company owner = await db.Companies.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+
+            if (owner == null)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
             int owner_id = owner.Id;
-            if (company_id!=owner_id)
+            if (owner==null)
             {
                 return StatusCode(HttpStatusCode.Forbidden);
             }
@@ -227,7 +372,7 @@ namespace EdubranApi.Controllers
                 detailsResourceUrl = project_data.attachment,
                 audience = project_data.targeted_level,
                 category = project_data.project_category,
-                companyId = company_id,
+                companyId = owner_id,
                 dueDate = project_data.due_date
 
             };
@@ -268,6 +413,11 @@ namespace EdubranApi.Controllers
 
 
         // DELETE: api/Projects/5
+        /// <summary>
+        /// Deletes a project given its id, only the company that created the project is able to perfom this operation
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ResponseType(typeof(Project))]
         [Route("DeleteProjects")]
         [HttpDelete]
