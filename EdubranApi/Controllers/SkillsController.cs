@@ -27,70 +27,76 @@ namespace EdubranApi.Controllers
         /// <param name="student_id"></param>
         /// <returns></returns>
        
-        [Route("getSkills")]
+        [Route("getStudentSkills")]
         [HttpGet]
-        public IQueryable<Skill> GetSkills(int student_id)
+        public IQueryable<SkillDTO> GetSkills(int student_id)
         {
             var skills = from b in db.Skills.Where(b => b.studentId == student_id)
-                         select new Skill
+                         select new SkillDTO
                          {
-                            Id= b.Id,
-                            skill= b.skill,
-                            studentId= b.studentId
+                             skill_id = b.Id,
+                             skill_name = b.skill
                          };
-                         
+
             return skills;
         }
         /// <summary>
-        /// Returns skills for the current student
+        /// Returns skills for the current student logged in, tested
         /// </summary>
         /// <returns></returns>
-        [Route("getSkills")]
+        [Route("getCurrentStudentSkills")]
         [HttpGet]
-        public IQueryable<Skill> GetSkills()
+        public IQueryable<SkillDTO> GetSkills()
         {
             string reg = User.Identity.GetUserId();
-            Student student = db.Students.First(b => b.registrationId == reg);
+            Student student = db.Students.Where(d => d.registrationId == reg).SingleOrDefault();
             if (student == null)
             {
                 return null;
             }
             var skills = from b in db.Skills.Where(b => b.studentId == student.Id)
-                         select new Skill
+                         select new SkillDTO
                          {
-                             Id = b.Id,
-                             skill = b.skill,
-                             studentId = b.studentId
+                             skill_id= b.Id,
+                             skill_name= b.skill
                          };
 
             return skills;
         }
 
-        // GET: api/Skills/5
+        
         /// <summary>
-        /// Returns the skill associated with that skill id
+        /// Returns the skill associated with that skill id, it could be useful for debugging
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [ResponseType(typeof(Skill))]
+        [ResponseType(typeof(SkillDTO))]
         [Route("getSkill")]
         [HttpGet]
         public async Task<IHttpActionResult> GetSkill(int id)
         {
-            Skill skill = await db.Skills.FindAsync(id);
-            if (skill == null)
+            Skill b = await db.Skills.FindAsync(id);
+            if (b == null)
             {
                 return NotFound();
             }
-
+            SkillDTO skill = new SkillDTO
+            {
+                skill_id = b.Id,
+                skill_name = b.skill
+            };
             return Ok(skill);
         }
 
-        // PUT: api/Skills/5
+        /// <summary>
+        /// Edit skill of the currently logged in student, it accepts the the id of the skill and the new name of the skill, tested
+        /// </summary>
+        /// <param name="skill_data"></param>
+        /// <returns>200 on success</returns>
         [ResponseType(typeof(void))]
         [Route("EditSkill")]
         [HttpPut]
-        public async Task<IHttpActionResult> PutSkill(int id, string skill_name)
+        public async Task<IHttpActionResult> PutSkill(SkillDTO skill_data)
         {
             string reg = User.Identity.GetUserId();
             Student student = await db.Students.FirstAsync(b => b.registrationId == reg);
@@ -103,14 +109,15 @@ namespace EdubranApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!SkillExists(id))
+            if (!SkillExists(skill_data.skill_id))
             {
                 return BadRequest();
             }
             Skill skill=  new Skill()
             {
-                skill = skill_name,
-                studentId = student.Id
+                skill = skill_data.skill_name,
+                studentId = student.Id,
+                Id = skill_data.skill_id
             };
             db.Entry(skill).State = EntityState.Modified;
 
@@ -120,7 +127,7 @@ namespace EdubranApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SkillExists(id))
+                if (!SkillExists(skill_data.skill_id))
                 {
                     return NotFound();
                 }
@@ -133,7 +140,11 @@ namespace EdubranApi.Controllers
             return StatusCode(HttpStatusCode.OK);
         }
 
-        // POST: api/Skills
+        /// <summary>
+        /// Create skills for the currently logged in student, if skill already exists it is simply skipped, tested
+        /// </summary>
+        /// <param name="skill_names"></param>
+        /// <returns></returns>
         [ResponseType(typeof(void))]
         [Route("AddSkills")]
         [HttpPost]
@@ -151,24 +162,42 @@ namespace EdubranApi.Controllers
                 return BadRequest(ModelState);
             }
             List<Skill> skills = new List<Skill>();
-            for(int i =0; i<skill_names.Length; i++)
+         
+            foreach (string skill_name in skill_names)
             {
+                int check = await db.Skills.CountAsync(d => d.skill == skill_name && d.studentId == student_id);
+                if (check > 0)
+                {
+                    continue;
+                }
                 skills.Add(new Skill()
                 {
-                    skill = skill_names[i],
+                    skill = skill_name,
                     studentId = student_id
                 });
             }
             
-            db.Skills.AddRange(skills);
+            IEnumerable<Skill> new_skills = db.Skills.AddRange(skills);
             await db.SaveChangesAsync();
-
-            return StatusCode(HttpStatusCode.OK);
+            List<SkillDTO> processed_skill = new List<SkillDTO>();
+            foreach( Skill sk in new_skills)
+            {
+                processed_skill.Add(new SkillDTO()
+                {
+                    skill_id= sk.Id,
+                    skill_name = sk.skill
+                });
+            }
+            return Ok(processed_skill);
         }
 
-        // DELETE: api/Skills/5
+        /// <summary>
+        /// remove skill of the particular logged in student, tested 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ResponseType(typeof(void))]
-        [Route("DeleteSkill")]
+        [Route("RemoveSkill")]
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteSkill(int id)
         {

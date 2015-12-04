@@ -7,22 +7,31 @@ using System.Web;
 
 namespace EdubranApi.Models
 {
-    /// <summary>
-    /// Comments
-    /// </summary>
-    public class Comment
+    public class Feedback
     {
         [Key]
         public int Id { get; set; }
-        public string registrationId { get; set; }
+        [Required]
         public string comment { get; set; }
         public string date { get; set; }
 
         //Foreign key
+        [Required]
         public int projectId { get; set; }
 
-        [ForeignKey("projectId")]
-        public Project project { get; set; }
+        [Required]
+        public int clientId { get; set; }
+
+        [Required]
+        public string name { get; set; }
+
+        public string profile_picture { get; set; }
+
+        [Required]
+        public string type { get; set; }
         
+
+
+
     }
 }

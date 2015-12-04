@@ -16,6 +16,10 @@ using Microsoft.Owin.Security.OAuth;
 using EdubranApi.Models;
 using EdubranApi.Providers;
 using EdubranApi.Results;
+using System.Net;
+using System.Linq;
+using System.Data.Entity;
+using System.Web.Http.Description;
 
 namespace EdubranApi.Controllers
 {
@@ -26,6 +30,7 @@ namespace EdubranApi.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private EdubranApiContext db = new EdubranApiContext();
+
         public AccountController()
         {
         }
@@ -52,6 +57,7 @@ namespace EdubranApi.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         // GET api/Account/UserInfo
+        [ApiExplorerSettings(IgnoreApi =true)]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
@@ -67,6 +73,7 @@ namespace EdubranApi.Controllers
         }
 
         // POST api/Account/Logout
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
@@ -75,6 +82,7 @@ namespace EdubranApi.Controllers
         }
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
@@ -115,7 +123,13 @@ namespace EdubranApi.Controllers
         }
 
         // POST api/Account/ChangePassword
+        /// <summary>
+        /// Change the password of the user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("ChangePassword")]
+        [HttpPut]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -154,6 +168,7 @@ namespace EdubranApi.Controllers
         }
 
         // POST api/Account/AddExternalLogin
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
         {
@@ -192,6 +207,7 @@ namespace EdubranApi.Controllers
         }
 
         // POST api/Account/RemoveLogin
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("RemoveLogin")]
         public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
         {
@@ -221,6 +237,7 @@ namespace EdubranApi.Controllers
         }
 
         // GET api/Account/ExternalLogin
+        [ApiExplorerSettings(IgnoreApi = true)]
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
         [AllowAnonymous]
@@ -278,6 +295,7 @@ namespace EdubranApi.Controllers
         }
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
+        [ApiExplorerSettings(IgnoreApi = true)]
         [AllowAnonymous]
         [Route("ExternalLogins")]
         public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
@@ -319,6 +337,11 @@ namespace EdubranApi.Controllers
         }
 
         // POST api/Account/CompanyRegistration
+        /// <summary>
+        /// This perfoms company registration
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>200 on success</returns>
         [AllowAnonymous]
         [Route("CompanyRegistration")]
         public async Task<IHttpActionResult> CompanyRegistration(CompanyRegDTO data)
@@ -364,6 +387,11 @@ namespace EdubranApi.Controllers
 
 
         // POST api/Account/StudentRegistration
+        /// <summary>
+        /// This registers a student
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns>200 on success</returns>
         [AllowAnonymous]
         [Route("StudentRegistration")]
         public async Task<IHttpActionResult> StudentRegistration(StudentRegDTO data)
@@ -409,10 +437,38 @@ namespace EdubranApi.Controllers
             }
             return Ok();
         }
+        /// <summary>
+        /// Retrives the type of the person logged in
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetClientType")]
+        [ResponseType(typeof(TypeDTO))]
+        [HttpGet]
+        public async Task<IHttpActionResult> userType()
+        {
+            String reg = User.Identity.GetUserId();
+
+            Student student = await db.Students.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+            Company company = await db.Companies.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+            if (student != null)
+            {
+                return Ok( new TypeDTO() { type = "student" });
+            }
+            else if (company != null)
+            {
+                return Ok(new TypeDTO() { type = "company" });
+            }
+
+            else
+            {
+                return StatusCode(HttpStatusCode.Conflict);
+            }
 
 
+        }
 
         // POST api/Account/RegisterExternal
+        [ApiExplorerSettings(IgnoreApi = true)]
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("RegisterExternal")]

@@ -26,7 +26,7 @@ namespace EdubranApi.Controllers
         private EdubranApiContext db = new EdubranApiContext();
         // needs pagination
         /// <summary>
-        /// get all the projects from all companies and categories
+        /// get all the projects from all companies and categories, tested
         /// </summary>
         /// <returns></returns>
         // GET: api/Projects
@@ -61,7 +61,7 @@ namespace EdubranApi.Controllers
 
         }
         /// <summary>
-        /// Retrieves the suggested project for the current logged in student, based on their category and academic level
+        /// Retrieves the suggested project for the current logged in student, based on their category and academic level, tested
         /// </summary>
         /// <returns>returns 200 on success and null on failure</returns>
         [Route("GetSuggestedProjects")]
@@ -357,12 +357,12 @@ namespace EdubranApi.Controllers
 
             if (owner == null)
             {
-                return StatusCode(HttpStatusCode.Forbidden);
+                return StatusCode(HttpStatusCode.NotAcceptable);
             }
             int owner_id = owner.Id;
             if (owner==null)
             {
-                return StatusCode(HttpStatusCode.Forbidden);
+                return StatusCode(HttpStatusCode.NotAcceptable);
             }
             Project project = new Project()
             {
@@ -434,7 +434,7 @@ namespace EdubranApi.Controllers
             }
             if (project.companyId!= owner_id)
             {
-                return StatusCode(HttpStatusCode.Forbidden);
+                return StatusCode(HttpStatusCode.NotAcceptable);
             }
             db.Projects.Remove(project);
             await db.SaveChangesAsync();

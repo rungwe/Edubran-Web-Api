@@ -36,6 +36,8 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>App_Data/XmlDocument.xml</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
+    <IncludeIisSettings>false</IncludeIisSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -217,8 +219,8 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationsController.cs" />
-    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
+    <Compile Include="Controllers\FeedbacksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\SkillsController.cs" />
@@ -234,6 +236,26 @@
     <Compile Include="Migrations\201512020739433_Initial1.Designer.cs">
       <DependentUpon>201512020739433_Initial1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512021250287_Initial2.cs" />
+    <Compile Include="Migrations\201512021250287_Initial2.Designer.cs">
+      <DependentUpon>201512021250287_Initial2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512031046280_Initial3.cs" />
+    <Compile Include="Migrations\201512031046280_Initial3.Designer.cs">
+      <DependentUpon>201512031046280_Initial3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512040740005_Initial4.cs" />
+    <Compile Include="Migrations\201512040740005_Initial4.Designer.cs">
+      <DependentUpon>201512040740005_Initial4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512040909036_Initial5.cs" />
+    <Compile Include="Migrations\201512040909036_Initial5.Designer.cs">
+      <DependentUpon>201512040909036_Initial5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512040932361_Initial6.cs" />
+    <Compile Include="Migrations\201512040932361_Initial6.Designer.cs">
+      <DependentUpon>201512040932361_Initial6.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -242,14 +264,16 @@
     <Compile Include="Models\ApplicationDTO.cs" />
     <Compile Include="Models\ApplicationPostDTO.cs" />
     <Compile Include="Models\ApplicationStudentDTO.cs" />
-    <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\ClientDTO.cs" />
     <Compile Include="Models\CommentDTO.cs" />
+    <Compile Include="Models\CommentPostDTO.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\CompanyDTO.cs" />
     <Compile Include="Models\CompanyEditDTO.cs" />
     <Compile Include="Models\CompanyProfileDTO.cs" />
     <Compile Include="Models\CompanyRegDTO.cs" />
     <Compile Include="Models\EdubranApiContext.cs" />
+    <Compile Include="Models\Feedback.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\ProjectAppDTO.cs" />
@@ -264,6 +288,7 @@
     <Compile Include="Models\StudentDTO.cs" />
     <Compile Include="Models\StudentEditDTO.cs" />
     <Compile Include="Models\StudentRegDTO.cs" />
+    <Compile Include="Models\TypeDTO.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -342,6 +367,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512020739433_Initial1.resx">
       <DependentUpon>201512020739433_Initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512021250287_Initial2.resx">
+      <DependentUpon>201512021250287_Initial2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512031046280_Initial3.resx">
+      <DependentUpon>201512031046280_Initial3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512040740005_Initial4.resx">
+      <DependentUpon>201512040740005_Initial4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512040909036_Initial5.resx">
+      <DependentUpon>201512040909036_Initial5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512040932361_Initial6.resx">
+      <DependentUpon>201512040932361_Initial6.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

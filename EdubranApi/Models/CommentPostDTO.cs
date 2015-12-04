@@ -6,17 +6,11 @@ using System.Web;
 
 namespace EdubranApi.Models
 {
-
-    /// <summary>
-    /// Application DTO for posting
-    /// </summary>
-    public class ApplicationPostDTO
+    public class CommentPostDTO
     {
         [Required]
-        public string motivation { get; set; }
-
+        public int project_id { get; set; }
         [Required]
-        public int projectId { get; set; }
-      
+        public string comment { get; set; }
     }
 }

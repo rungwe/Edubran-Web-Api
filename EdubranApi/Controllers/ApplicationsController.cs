@@ -221,19 +221,15 @@ namespace EdubranApi.Controllers
 
             return Ok(application);
         }
-
-
-
+        
         /// <summary>
-        /// This is used by students to create applications
+        /// This is used by students to create applications, 1 application is allowed per project
         /// </summary>
-        /// <param name="project_id"></param>
-        /// <param name="application_data"></param>
-        /// <returns>200 on success and 406 </returns>
-        [ResponseType(typeof(ApplicationDTO))]
+        /// <param name="app_data"></param>
+        /// <returns>200 on success, 406 on failure if student doesn't qualify</returns>
         [Route("CreateApplication")]
-        [HttpGet]
-        public async Task<IHttpActionResult> PostApplication(int project_id, ApplicationPostDTO application_data)
+        [HttpPost]
+        public async Task<IHttpActionResult> PostApplication(ApplicationPostDTO app_data)
         {
             if (!ModelState.IsValid)
             {
@@ -248,12 +244,18 @@ namespace EdubranApi.Controllers
 
             
 
-            Project project = await db.Projects.FindAsync(project_id);
+            Project project = await db.Projects.FindAsync(app_data.projectId);
             if (project == null)
             {
-                return StatusCode(HttpStatusCode.BadRequest);
+                return StatusCode(HttpStatusCode.NotFound);
             }
 
+            int check =  db.Applications.Count(d => d.projectId == app_data.projectId && d.studentId == client.Id);
+
+            if (check > 0)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
             // check if student information matches minimum requirements for the project
             if (project.category!=client.category || project.audience!=client.level)
             {
@@ -264,10 +266,10 @@ namespace EdubranApi.Controllers
 
             Application application = new Application
             {
-                motivation = application_data.motivation,
+                motivation = app_data.motivation,
                 companyId =  project.companyId,
                 studentId =  client.Id,
-                projectId = project_id,
+                projectId = app_data.projectId,
                 applicationStatus = 0,
                 applicationDate ="today"
             };
@@ -275,31 +277,7 @@ namespace EdubranApi.Controllers
             Application b = db.Applications.Add(application);
             await db.SaveChangesAsync();
 
-            ApplicationStudentDTO new_application = new ApplicationStudentDTO()
-            {
-                application_num = b.Id,
-                applicationStatus = b.applicationStatus,
-                motivation = b.motivation,
-                company = new CompanyDTO
-                {
-                    companyID = b.company.Id,
-                    name = b.company.companyName,
-                    company_category = b.company.category,
-                    profile_pic = b.company.profilePicture,
-                    wall_pic = b.company.wallpaper
-                },
-                project = new ProjectAppDTO
-                {
-                    project_id = b.project.Id,
-                    project_category = b.project.category,
-                    project_title = b.project.title,
-                    project_status = b.project.status,
-                    targeted_level = b.project.audience
-
-                }
-            };
-
-            return Ok(new_application);
+            return StatusCode(HttpStatusCode.OK);
         }
 
         

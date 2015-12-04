@@ -29,6 +29,6 @@ namespace EdubranApi.Models
 
         public System.Data.Entity.DbSet<EdubranApi.Models.Skill> Skills { get; set; }
 
-        public System.Data.Entity.DbSet<EdubranApi.Models.Comment> Comments { get; set; }
+        public System.Data.Entity.DbSet<EdubranApi.Models.Feedback> Feedbacks { get; set; }
     }
 }
