@@ -48,6 +48,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK, Version=2.3.52.0, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.2.3.52.0\lib\net45\AWSSDK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -225,6 +229,7 @@
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\SkillsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -256,6 +261,14 @@
     <Compile Include="Migrations\201512040932361_Initial6.Designer.cs">
       <DependentUpon>201512040932361_Initial6.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201512061224409_Initial7.cs" />
+    <Compile Include="Migrations\201512061224409_Initial7.Designer.cs">
+      <DependentUpon>201512061224409_Initial7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512061227147_Initial8.cs" />
+    <Compile Include="Migrations\201512061227147_Initial8.Designer.cs">
+      <DependentUpon>201512061227147_Initial8.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -274,6 +287,7 @@
     <Compile Include="Models\CompanyRegDTO.cs" />
     <Compile Include="Models\EdubranApiContext.cs" />
     <Compile Include="Models\Feedback.cs" />
+    <Compile Include="Models\FileDTO.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\ProjectAppDTO.cs" />
@@ -382,6 +396,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512040932361_Initial6.resx">
       <DependentUpon>201512040932361_Initial6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512061224409_Initial7.resx">
+      <DependentUpon>201512061224409_Initial7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512061227147_Initial8.resx">
+      <DependentUpon>201512061227147_Initial8.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

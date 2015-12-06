@@ -11,6 +11,7 @@ namespace EdubranApi.Models
         public string project_title { get; set; }
         public string project_status { get; set; }
         public string project_category { get; set; }
+        public string project_pic { get; set; }
         public string description { get; set; }
         public string attachment { get; set; }
         public string launch_date { get; set; }

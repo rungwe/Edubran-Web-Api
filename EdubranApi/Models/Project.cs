@@ -17,6 +17,7 @@ namespace EdubranApi.Models
         [Key]
         public int Id { get; set; }
         public string title { get; set; }
+        public string post_pic { get; set; }
         public string status { get; set; }
         public string category { get; set; }
         public string detailsText { get; set; }

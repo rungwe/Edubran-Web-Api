@@ -158,6 +158,7 @@ namespace EdubranApi.Controllers
                                        project_category = b.project.category,
                                        project_title = b.project.title,
                                        project_status = b.project.status,
+                                       project_pic = b.project.post_pic,
                                        targeted_level = b.project.audience
 
                                    }
@@ -214,6 +215,7 @@ namespace EdubranApi.Controllers
                     project_category = b.project.category,
                     project_title = b.project.title,
                     project_status = b.project.status,
+                    project_pic = b.project.post_pic,
                     targeted_level = b.project.audience
 
                 }

@@ -14,6 +14,9 @@ using Microsoft.AspNet.Identity;
 
 namespace EdubranApi.Controllers
 {
+    /// <summary>
+    /// This controller facilitates student skills, you can see skills of a students, edit delete etc
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/Skill")]
     public class SkillsController : ApiController
