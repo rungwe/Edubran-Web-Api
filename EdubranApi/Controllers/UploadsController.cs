@@ -24,6 +24,7 @@ namespace EdubranApi.Controllers
     public class UploadsController : ApiController
     {
         private EdubranApiContext db = new EdubranApiContext();
+        
 
         [HttpPost]
         [Route("uploadImage")]

@@ -90,6 +90,8 @@ namespace EdubranApi.Controllers
             {
                 return NotFound();
             }
+            // count number of applications
+            int apps_num = await db.Applications.CountAsync(e => e.studentId == b.Id);
             StudentDetailedDTO student = new StudentDetailedDTO()
             {
                 student_number = b.Id,
@@ -106,7 +108,7 @@ namespace EdubranApi.Controllers
                 email_address = b.email,
                 phone_number = b.phone,
                 transcripts = b.transcripts,
-                application_num= b.application_number
+                application_num= apps_num
 
             };
             return Ok(student);
@@ -134,6 +136,9 @@ namespace EdubranApi.Controllers
             }
             else
             {
+                // count number of applications
+                int apps_num = await db.Applications.CountAsync(e => e.studentId == b.Id);
+
                 student = new StudentDetailedDTO()
                 {
                     student_number = b.Id,
@@ -150,7 +155,7 @@ namespace EdubranApi.Controllers
                     email_address = b.email,
                     phone_number = b.phone,
                     transcripts = b.transcripts,
-                    application_num = b.application_number
+                    application_num = apps_num
 
                 };
             }
