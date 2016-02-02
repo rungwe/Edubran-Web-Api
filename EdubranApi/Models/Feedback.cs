@@ -14,6 +14,8 @@ namespace EdubranApi.Models
         [Required]
         public string comment { get; set; }
         public string date { get; set; }
+        
+        public Int32 time { get; set; }
 
         //Foreign key
         [Required]

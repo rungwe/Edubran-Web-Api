@@ -57,6 +57,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -227,15 +235,12 @@
     <Compile Include="Controllers\FeedbacksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SkillsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\UploadsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511291142233_Initial.cs" />
-    <Compile Include="Migrations\201511291142233_Initial.Designer.cs">
-      <DependentUpon>201511291142233_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201512020739433_Initial1.cs" />
     <Compile Include="Migrations\201512020739433_Initial1.Designer.cs">
@@ -268,6 +273,10 @@
     <Compile Include="Migrations\201512061227147_Initial8.cs" />
     <Compile Include="Migrations\201512061227147_Initial8.Designer.cs">
       <DependentUpon>201512061227147_Initial8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601312111163_initial.cs" />
+    <Compile Include="Migrations\201601312111163_initial.Designer.cs">
+      <DependentUpon>201601312111163_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -313,6 +322,7 @@
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -376,9 +386,6 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511291142233_Initial.resx">
-      <DependentUpon>201511291142233_Initial.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512020739433_Initial1.resx">
       <DependentUpon>201512020739433_Initial1.cs</DependentUpon>
     </EmbeddedResource>
@@ -402,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512061227147_Initial8.resx">
       <DependentUpon>201512061227147_Initial8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601312111163_initial.resx">
+      <DependentUpon>201601312111163_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

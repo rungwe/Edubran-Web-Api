@@ -240,6 +240,7 @@ namespace EdubranApi.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetProjectDetail(int id)
         {
+            
             var project = await db.Projects.Include(b => b.company).Select(b =>
         new ProjectDetailDTO()
         {
@@ -254,7 +255,7 @@ namespace EdubranApi.Controllers
             due_date = b.dueDate,
             targeted_level = b.audience,
             num_views = b.numViews,
-            num_application = b.numApplication,
+            num_application =   db.Applications.Count(e => e.projectId == b.Id),
             num_comments = b.numComments,
             company = new CompanyDTO()
             {
@@ -370,6 +371,26 @@ namespace EdubranApi.Controllers
             {
                 return StatusCode(HttpStatusCode.NotAcceptable);
             }
+            Int32 timeStamp ;
+            Int32 closing;
+            DateTime dueDate;
+            try
+            {
+
+                timeStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                dueDate = DateTime.ParseExact(project_data.due_date, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture).ToUniversalTime();
+                closing = (Int32)(dueDate.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            }
+            catch (Exception e)
+            {
+
+                return StatusCode(HttpStatusCode.ExpectationFailed);
+            }
+            TimeSpan span = dueDate.Subtract(DateTime.UtcNow);
+            if (span.Days<1)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
             Project project = new Project()
             {
 
@@ -379,7 +400,9 @@ namespace EdubranApi.Controllers
                 audience = project_data.targeted_level,
                 category = project_data.project_category,
                 companyId = owner_id,
-                dueDate = project_data.due_date
+                dueDate = project_data.due_date,
+                currentDate = timeStamp,
+                closingDate = closing
 
             };
             if (!ModelState.IsValid)

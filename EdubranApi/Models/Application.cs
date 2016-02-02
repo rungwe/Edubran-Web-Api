@@ -25,6 +25,10 @@ namespace EdubranApi.Models
         public int projectId { get; set; }
         public int studentId { get; set; }
         public int companyId { get; set; }
+
+        
+        public Int32 applicationTime { get; set; }
+
         //Navigation property
         [ForeignKey("projectId")]
         public Project project { get; set; }

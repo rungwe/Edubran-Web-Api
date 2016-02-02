@@ -259,7 +259,7 @@ namespace EdubranApi.Controllers
                 return StatusCode(HttpStatusCode.Forbidden);
             }
             // check if student information matches minimum requirements for the project
-            if (project.category!=client.category || project.audience!=client.level)
+            if (project.category!=client.category || client.level<project.audience)
             {
                 return StatusCode(HttpStatusCode.NotAcceptable);
 

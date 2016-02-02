@@ -24,6 +24,10 @@ namespace EdubranApi.Models
         public string detailsResourceUrl { get; set; }
         public string launchDate { get; set; }
         public string dueDate { get; set; }
+       
+        public Int32 currentDate { get; set; }
+        
+        public Int32 closingDate { get; set; }
         /// <summary>
         /// The targeted audience eg first year = 1, second year = 2 ....
         /// </summary>
