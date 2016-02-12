@@ -62,7 +62,7 @@ namespace EdubranApi.Controllers
                                 name = b.companyName,
                                 company_category = b.category,
                                 profile_pic = b.profilePicture,
-                                wall_pic = b.profilePicture
+                                wall_pic = b.wallpaper
                             };
             return companies;
         }
@@ -92,7 +92,7 @@ namespace EdubranApi.Controllers
                 name = company.companyName,
                 email_address = company.email,
                 profile_pic = company.profilePicture,
-                wall_pic = company.profilePicture,
+                wall_pic = company.wallpaper,
                 facebook = company.fb_url,
                 fax_num = company.fax,
                 linkdn = company.lkdn_url,
@@ -130,7 +130,7 @@ namespace EdubranApi.Controllers
                 name = company.companyName,
                 email_address = company.email,
                 profile_pic = company.profilePicture,
-                wall_pic = company.profilePicture,
+                wall_pic = company.wallpaper,
                 facebook = company.fb_url,
                 fax_num = company.fax,
                 linkdn = company.lkdn_url,
@@ -175,7 +175,6 @@ namespace EdubranApi.Controllers
             {
                 companyName = company_edit.name,
                 category = company_edit.company_category,
-                email = company_edit.email_address,
                 wallpaper = company_edit.wall_pic,
                 profilePicture =company_edit.profile_pic,
                 website = company_edit.web_url,

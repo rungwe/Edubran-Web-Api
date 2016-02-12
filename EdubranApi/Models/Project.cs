@@ -37,8 +37,16 @@ namespace EdubranApi.Models
         public int numApplication { get; set; }
 
         // unimplemented fields
+        /// <summary>
+        /// project renumarations
+        /// </summary>
         public string other1 { get; set; }
+
+        /// <summary>
+        /// project location, specifically City
+        /// </summary>
         public string other2 { get; set; }
+
         public string other3 { get; set; }
         
         public int value1 { get; set; }

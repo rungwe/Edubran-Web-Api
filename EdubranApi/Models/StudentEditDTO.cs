@@ -14,11 +14,14 @@ namespace EdubranApi.Models
         public string profile_pic { get; set; }
         public string wall_paper { get; set; }
         public string category { get; set; }
-        public string curriculum_vitae { get; set; }
-        public string transcripts { get; set; }
         public string linkdn_url { get; set; }
-        public int phone_number { get; set; }
+        public string phone_number { get; set; }
         public string email_address { get; set; }
+        public string gender { set; get; }
+        /// <summary>
+        /// format MM/dd/yyyy
+        /// </summary>
+        public string birthday { get; set; }
 
         /// <summary>
         /// name of the university or techknikon

@@ -16,9 +16,17 @@ namespace EdubranApi.Models
         public string category { get; set; }
         public string curriculum_vitae { get; set; }
         public string transcripts { get; set; }
+        public string national_id { get; set; }
         public string linkdn_url { get; set; }
-        public int phone_number { get; set; }
+        public string phone_number { get; set; }
         public string email_address { get; set; }
+        public string ethinicity { get; set; }
+        public string birthday { get; set; }
+
+        /// <summary>
+        /// male or female
+        /// </summary>
+        public string gender { get; set; }
         public int application_num { get; set; }
 
         /// <summary>

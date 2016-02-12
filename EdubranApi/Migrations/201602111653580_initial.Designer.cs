@@ -13,7 +13,7 @@ namespace EdubranApi.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201601312111163_initial"; }
+            get { return "201602111653580_initial"; }
         }
         
         string IMigrationMetadata.Source

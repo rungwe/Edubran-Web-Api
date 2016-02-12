@@ -265,6 +265,11 @@ namespace EdubranApi.Controllers
 
             }
            
+            Int32 timeStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            if(timeStamp> project.closingDate)
+            {
+                return StatusCode(HttpStatusCode.Forbidden);
+            }
 
             Application application = new Application
             {
@@ -273,7 +278,8 @@ namespace EdubranApi.Controllers
                 studentId =  client.Id,
                 projectId = app_data.projectId,
                 applicationStatus = 0,
-                applicationDate ="today"
+                applicationDate =""+ DateTime.UtcNow.Month + "/"+DateTime.UtcNow.Day + "/"+DateTime.UtcNow.Year,
+                applicationTime = timeStamp
             };
 
             Application b = db.Applications.Add(application);
@@ -282,7 +288,40 @@ namespace EdubranApi.Controllers
             return StatusCode(HttpStatusCode.OK);
         }
 
-        
+        /// <summary>
+        /// it checks whether a student has applied for that project, returns 1 if applied, and -1 when not applied otherwise 0
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("CheckApplication")]
+        [HttpGet]
+        public int checkApplication(int id)
+        {
+            string reg = User.Identity.GetUserId();
+            Student client =  db.Students.Where(d => d.registrationId == reg).SingleOrDefault();
+            if (client == null)
+            {
+                return 0;
+            }
+
+            Project project =  db.Projects.Find(id);
+            if (project == null)
+            {
+                return 0;
+            }
+
+
+            int check = db.Applications.Count(d => d.projectId == id && d.studentId == client.Id);
+
+            if (check > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {

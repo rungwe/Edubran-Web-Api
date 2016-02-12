@@ -23,7 +23,24 @@ namespace EdubranApi.Models
         public int num_views { get; set; }
         public int num_comments { get; set; }
         public int num_application { get; set; }
+        public int time_seconds { get; set; }
+        public int time_minutes { get; set; }
+        public int time_hours { get; set; }
+        public int time_days {get; set;}
 
+        /// <summary>
+        /// Project salary if applicable
+        /// </summary>
+        public string remuneration { get; set; }
+
+        /// <summary>
+        /// project location
+        /// </summary>
+        public string city { get; set; }
+
+        /// <summary>
+        /// Company that owns the project
+        /// </summary>
         public CompanyDTO company;
     }
 }

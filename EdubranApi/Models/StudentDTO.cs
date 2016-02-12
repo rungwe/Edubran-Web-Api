@@ -14,6 +14,7 @@ namespace EdubranApi.Models
         public string profile_pic { get; set; }
         public string wall_paper { get; set; }
         public string category { get; set; }
+        public string gender { get; set; }
         /// <summary>
         /// name of the university or techknikon
         /// </summary>

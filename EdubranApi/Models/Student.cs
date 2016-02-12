@@ -19,7 +19,7 @@ namespace EdubranApi.Models
         [Required]
         [EmailAddress]
         public string email { get; set; }
-        public int phone { get; set; }
+        public string phone { get; set; }
         public string firstName { get; set; }
         public string middleName { get; set; }
         public string lastName { get; set; }
@@ -27,6 +27,7 @@ namespace EdubranApi.Models
         public string wallpaper { get; set; }
         public string dateOfBirth { get; set; }
         public string gender { get; set; }
+
         [Required]
         public string category { get; set; }
         [Required]
@@ -37,7 +38,9 @@ namespace EdubranApi.Models
         public int application_number { get; set; }
         public string transcripts { get; set; }
         public string cv { get; set; }
+        public string national_id { set; get; }
         public string linkdn { get; set; }
+        public string  ethinicity { get; set; }
         [Required]
         public string institute { get; set; }
 

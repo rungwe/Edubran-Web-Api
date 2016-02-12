@@ -44,6 +44,7 @@ namespace EdubranApi.Controllers
                                wall_paper = b.wallpaper,
                                category = b.category,
                                instituiton=b.institute,
+                               gender = b.gender,
                                level = b.level
                            };
             return students;
@@ -69,6 +70,7 @@ namespace EdubranApi.Controllers
                                wall_paper = b.wallpaper,
                                category = b.category,
                                instituiton = b.institute,
+                               gender = b.gender,
                                level = b.level
                            };
             return students;
@@ -108,7 +110,11 @@ namespace EdubranApi.Controllers
                 email_address = b.email,
                 phone_number = b.phone,
                 transcripts = b.transcripts,
-                application_num= apps_num
+                application_num= apps_num,
+                birthday = b.dateOfBirth,
+                national_id = b.national_id,
+                gender=b.gender,
+                ethinicity = b.ethinicity
 
             };
             return Ok(student);
@@ -155,7 +161,11 @@ namespace EdubranApi.Controllers
                     email_address = b.email,
                     phone_number = b.phone,
                     transcripts = b.transcripts,
-                    application_num = apps_num
+                    application_num = apps_num,
+                    birthday = b.dateOfBirth,
+                    national_id = b.national_id,
+                    gender = b.gender,
+                    ethinicity = b.ethinicity
 
                 };
             }
@@ -190,6 +200,7 @@ namespace EdubranApi.Controllers
             }
 
 
+            
 
             Student student = new Student()
             {
@@ -198,16 +209,18 @@ namespace EdubranApi.Controllers
                 lastName = profile.last_name,
                 level = profile.level,
                 category= profile.category,
-                cv = profile.curriculum_vitae,
-                email = profile.email_address,
                 institute= profile.instituiton,
-                transcripts = profile.profile_pic,
                 phone = profile.phone_number,
                 wallpaper = profile.wall_paper,
-                linkdn = profile.profile_pic,
+                linkdn = profile.linkdn_url,
                 profilePic = profile.profile_pic,
                 Id = client.Id
             };
+
+            if (profile.level == 0)
+            {
+                student.level = client.level;
+            }
 
             foreach (PropertyInfo propertyInfo in client.GetType().GetProperties())
             {

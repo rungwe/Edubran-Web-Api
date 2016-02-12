@@ -24,8 +24,8 @@ namespace EdubranApi.Controllers
     public class UploadsController : ApiController
     {
         private EdubranApiContext db = new EdubranApiContext();
-        
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost]
         [Route("uploadImage")]
         [ResponseType(typeof(void))]
@@ -342,6 +342,194 @@ namespace EdubranApi.Controllers
             return StatusCode(HttpStatusCode.ExpectationFailed);
 
         }
+
+
+        /// <summary>
+        /// Upload the transcripts, only for students
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("transcripts")]
+        [ResponseType(typeof(FileDTO))]
+        public async Task<IHttpActionResult> transcripts()
+        {
+            if (HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                string reg = User.Identity.GetUserId();
+                
+                Student student = await db.Students.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+
+                // Get the uploaded image from the Files collection
+                var httpPostedFile = HttpContext.Current.Request.Files["UploadedImage"];
+                Stream img = httpPostedFile.InputStream;
+                if (student != null)
+                {
+
+
+                    if (httpPostedFile != null)
+                    {
+                        string oldname = student.transcripts;
+                        string filename = Guid.NewGuid().ToString() + httpPostedFile.FileName.Replace(" ", "-");
+
+                        bool status = UploadFileToS3(filename, img, "edu-media");
+                        if (status)
+                        {
+                            student.transcripts = "https://s3-us-west-2.amazonaws.com/edu-media/" + filename;
+                            db.Entry(student).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                            if (oldname != null)
+                            {
+                                deleteFile(oldname.Replace("https://s3-us-west-2.amazonaws.com/edu-media/", ""), "edu-media");
+                            }
+                            return Ok(new FileDTO() { filename = student.transcripts });
+                        }
+                        else
+                        {
+                            return StatusCode(HttpStatusCode.NotAcceptable);
+                        }
+                    }
+                }
+
+                else
+                {
+                    return StatusCode(HttpStatusCode.BadRequest);
+
+                }
+
+
+
+            }
+
+            return StatusCode(HttpStatusCode.ExpectationFailed);
+
+        }
+
+
+
+
+        /// <summary>
+        /// Upload the transcripts, only for students
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("curriculumVitae")]
+        [ResponseType(typeof(FileDTO))]
+        public async Task<IHttpActionResult> curriculumVitae()
+        {
+            if (HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                string reg = User.Identity.GetUserId();
+
+                Student student = await db.Students.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+
+                // Get the uploaded image from the Files collection
+                var httpPostedFile = HttpContext.Current.Request.Files["UploadedImage"];
+                Stream img = httpPostedFile.InputStream;
+                if (student != null)
+                {
+
+
+                    if (httpPostedFile != null)
+                    {
+                        string oldname = student.cv;
+                        string filename = Guid.NewGuid().ToString() + httpPostedFile.FileName.Replace(" ", "-");
+
+                        bool status = UploadFileToS3(filename, img, "edu-media");
+                        if (status)
+                        {
+                            student.cv = "https://s3-us-west-2.amazonaws.com/edu-media/" + filename;
+                            db.Entry(student).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                            if (oldname != null)
+                            {
+                                deleteFile(oldname.Replace("https://s3-us-west-2.amazonaws.com/edu-media/", ""), "edu-media");
+                            }
+                            return Ok(new FileDTO() { filename = student.cv });
+                        }
+                        else
+                        {
+                            return StatusCode(HttpStatusCode.NotAcceptable);
+                        }
+                    }
+                }
+
+                else
+                {
+                    return StatusCode(HttpStatusCode.BadRequest);
+
+                }
+
+
+
+            }
+
+            return StatusCode(HttpStatusCode.ExpectationFailed);
+
+        }
+
+
+
+
+        /// <summary>
+        /// Upload the transcripts, only for students
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("identityDoc")]
+        [ResponseType(typeof(FileDTO))]
+        public async Task<IHttpActionResult> identity_document()
+        {
+            if (HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                string reg = User.Identity.GetUserId();
+
+                Student student = await db.Students.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
+
+                // Get the uploaded image from the Files collection
+                var httpPostedFile = HttpContext.Current.Request.Files["UploadedImage"];
+                Stream img = httpPostedFile.InputStream;
+                if (student != null)
+                {
+
+
+                    if (httpPostedFile != null)
+                    {
+                        string oldname = student.national_id;
+                        string filename = Guid.NewGuid().ToString() + httpPostedFile.FileName.Replace(" ", "-");
+
+                        bool status = UploadFileToS3(filename, img, "edu-media");
+                        if (status)
+                        {
+                            student.national_id = "https://s3-us-west-2.amazonaws.com/edu-media/" + filename;
+                            db.Entry(student).State = EntityState.Modified;
+                            await db.SaveChangesAsync();
+                            if (oldname != null)
+                            {
+                                deleteFile(oldname.Replace("https://s3-us-west-2.amazonaws.com/edu-media/", ""), "edu-media");
+                            }
+                            return Ok(new FileDTO() { filename = student.national_id });
+                        }
+                        else
+                        {
+                            return StatusCode(HttpStatusCode.NotAcceptable);
+                        }
+                    }
+                }
+
+                else
+                {
+                    return StatusCode(HttpStatusCode.BadRequest);
+
+                }
+
+
+
+            }
+
+            return StatusCode(HttpStatusCode.ExpectationFailed);
+
+        }
+
 
 
         [ApiExplorerSettings(IgnoreApi = true)]
