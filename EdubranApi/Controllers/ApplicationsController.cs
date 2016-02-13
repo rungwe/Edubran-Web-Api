@@ -120,6 +120,70 @@ namespace EdubranApi.Controllers
             return applications;
         }
 
+
+
+        /// <summary>
+        /// Retrieves all applications made by the student currently logged in
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetProjectApplications")]
+        [HttpGet]
+        public IQueryable<ApplicationDTO> GetProjectApplications( int project_id)
+        {
+            string reg = User.Identity.GetUserId();
+            Project project = db.Projects.Find(project_id);
+            if (project == null)
+            {
+                return null;
+            }
+            var applications = from b in db.Applications
+                               .Include(b => b.company)
+                               .Include(b => b.project)
+                               .Include(b => b.student)
+                               .Where(b => b.projectId== project_id)
+
+                               select new ApplicationDTO
+                               {
+                                   application_num = b.Id,
+                                   applicationStatus = b.applicationStatus,
+                                   motivation = b.motivation,
+                                   company = new CompanyDTO
+                                   {
+                                       companyID = b.company.Id,
+                                       name = b.company.companyName,
+                                       company_category = b.company.category,
+                                       profile_pic = b.company.profilePicture,
+                                       wall_pic = b.company.wallpaper
+                                   },
+                                   project = new ProjectAppDTO
+                                   {
+                                       project_id = b.project.Id,
+                                       project_category = b.project.category,
+                                       project_title = b.project.title,
+                                       project_status = b.project.status,
+                                       targeted_level = b.project.audience
+
+                                   },
+                                   student = new StudentDTO
+                                   {
+                                       student_number = b.student.Id,
+                                       first_name = b.student.firstName,
+                                       middle_name = b.student.middleName,
+                                       last_name = b.student.lastName,
+                                       wall_paper = b.student.wallpaper,
+                                       profile_pic = b.student.profilePic,
+                                       category = b.student.category,
+                                       level = b.student.level,
+                                       instituiton = b.student.institute
+
+                                   }
+
+                               };
+            return applications;
+        }
+
+
+
         /// <summary>
         /// Retrieves the applications associated with the currently logged in company
         /// </summary>

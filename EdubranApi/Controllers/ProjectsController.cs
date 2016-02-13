@@ -47,6 +47,10 @@ namespace EdubranApi.Controllers
                               num_comments = b.numComments,
                               num_views = b.numViews,
                               timestamp = b.currentDate,
+                              due_date = b.dueDate,
+                              city = b.other2,
+                              remuneration = b.other1,
+                              posted_date = b.launchDate,
                               company = new CompanyDTO()
                               {
                                   companyID = b.company.Id,
@@ -57,15 +61,16 @@ namespace EdubranApi.Controllers
                               }
                           
                           };
+            
            List<ProjectDTO> list= project.ToList();
-            foreach (ProjectDTO pr in project)
+            foreach (ProjectDTO pr in list)
             {
                 TimeSpan sp = span(pr.timestamp);
                 pr.timestamp = sp.Days;
                 pr.time_hours = sp.Hours;
                 pr.time_minutes = sp.Minutes;
                 pr.time_seconds = sp.Seconds;
-                list.Add(pr);
+                
 
             }
 
@@ -89,7 +94,7 @@ namespace EdubranApi.Controllers
             {
                 return null;
             }
-            var project = from b in db.Projects.Include(b => b.company).Where(b => b.category == client.category && b.audience == client.level)
+            var project = from b in db.Projects.Include(b => b.company).Where(b => b.category == client.category && b.audience <= client.level)
                           select new ProjectDTO
                           {
                               project_id = b.Id,
@@ -103,7 +108,9 @@ namespace EdubranApi.Controllers
                               num_views = b.numViews,
                               timestamp = b.currentDate,
                               remuneration = b.other1,
+                              due_date = b.dueDate,
                               city = b.other2,
+                              posted_date = b.launchDate,
                               company = new CompanyDTO()
                               {
                                   companyID = b.company.Id,
@@ -115,18 +122,18 @@ namespace EdubranApi.Controllers
 
                           };
 
-            foreach (ProjectDTO pr in project)
+            List<ProjectDTO> list = project.ToList();
+            foreach (ProjectDTO pr in list)
             {
                 TimeSpan sp = span(pr.timestamp);
                 pr.timestamp = sp.Days;
                 pr.time_hours = sp.Hours;
                 pr.time_minutes = sp.Minutes;
                 pr.time_seconds = sp.Seconds;
-
+                
             }
 
-
-            return project;
+            return list.AsQueryable();
 
 
         }
@@ -158,8 +165,10 @@ namespace EdubranApi.Controllers
                               num_comments = b.numComments,
                               num_views = b.numViews,
                               timestamp =b.currentDate,
+                              due_date = b.dueDate,
                               remuneration = b.other1,
                               city = b.other2,
+                              posted_date = b.launchDate,
                               company = new CompanyDTO()
                               {
                                   companyID = b.company.Id,
@@ -170,17 +179,21 @@ namespace EdubranApi.Controllers
                               }
 
                           };
-            foreach (ProjectDTO pr in project)
+
+            List<ProjectDTO> list = project.ToList();
+            foreach (ProjectDTO pr in list)
             {
                 TimeSpan sp = span(pr.timestamp);
+
                 pr.timestamp = sp.Days;
                 pr.time_hours = sp.Hours;
                 pr.time_minutes = sp.Minutes;
                 pr.time_seconds = sp.Seconds;
+                
 
             }
 
-            return project;
+            return list.AsQueryable();
 
 
         }
@@ -218,6 +231,7 @@ namespace EdubranApi.Controllers
                               timestamp = b.currentDate,
                               remuneration = b.other1,
                               city = b.other2,
+                              posted_date = b.launchDate,
                               company = new CompanyDTO()
                               {
                                   companyID = b.company.Id,
@@ -229,17 +243,19 @@ namespace EdubranApi.Controllers
 
                           };
 
-            foreach (ProjectDTO pr in project)
+            List<ProjectDTO> list = project.ToList();
+            foreach (ProjectDTO pr in list)
             {
                 TimeSpan sp = span(pr.timestamp);
                 pr.timestamp = sp.Days;
                 pr.time_hours = sp.Hours;
                 pr.time_minutes = sp.Minutes;
                 pr.time_seconds = sp.Seconds;
+               
 
             }
 
-            return project;
+            return list.AsQueryable();
 
 
         }
@@ -278,6 +294,7 @@ namespace EdubranApi.Controllers
                               timestamp = b.currentDate,
                               remuneration = b.other1,
                               city = b.other2,
+                              posted_date = b.launchDate,
                               company = new CompanyDTO()
                               {
                                   companyID = b.company.Id,
@@ -289,17 +306,19 @@ namespace EdubranApi.Controllers
 
                           };
 
-            foreach (ProjectDTO pr in project)
+            List<ProjectDTO> list = project.ToList();
+            foreach (ProjectDTO pr in list)
             {
                 TimeSpan sp = span(pr.timestamp);
-                pr.timestamp = sp.Days;
+                pr.time_days = sp.Days;
                 pr.time_hours = sp.Hours;
                 pr.time_minutes = sp.Minutes;
                 pr.time_seconds = sp.Seconds;
+               
 
             }
 
-            return project;
+            return list.AsQueryable();
 
 
         }
@@ -338,6 +357,7 @@ namespace EdubranApi.Controllers
                               timestamp = b.currentDate,
                               remuneration = b.other1,
                               city = b.other2,
+                              posted_date = b.launchDate,
                               company = new CompanyDTO()
                               {
                                   companyID = b.company.Id,
@@ -349,17 +369,19 @@ namespace EdubranApi.Controllers
 
                           };
 
-            foreach (ProjectDTO pr in project)
+            List<ProjectDTO> list = project.ToList();
+            foreach (ProjectDTO pr in list)
             {
                 TimeSpan sp = span(pr.timestamp);
-                pr.timestamp = sp.Days;
+                pr.time_days = sp.Days;
                 pr.time_hours = sp.Hours;
                 pr.time_minutes = sp.Minutes;
                 pr.time_seconds = sp.Seconds;
+                
 
             }
 
-            return project;
+            return list.AsQueryable();
 
 
         }
@@ -390,6 +412,7 @@ namespace EdubranApi.Controllers
                               timestamp = b.currentDate,
                               remuneration = b.other1,
                               city = b.other2,
+                              posted_date = b.launchDate,
                               company = new CompanyDTO()
                               {
                                   companyID = b.company.Id,
@@ -399,16 +422,20 @@ namespace EdubranApi.Controllers
                                   wall_pic = b.company.wallpaper
                               }
                           };
-            foreach (ProjectDTO pr in project)
+
+            List<ProjectDTO> list = project.ToList();
+            foreach (ProjectDTO pr in list)
             {
                 TimeSpan sp = span(pr.timestamp);
-                pr.timestamp = sp.Days;
+                pr.time_days = sp.Days;
                 pr.time_hours = sp.Hours;
                 pr.time_minutes = sp.Minutes;
                 pr.time_seconds = sp.Seconds;
+                
 
             }
-            return project;
+
+            return list.AsQueryable();
 
 
         }
@@ -444,6 +471,7 @@ namespace EdubranApi.Controllers
             num_comments = b.numComments,
             remuneration = b.other1,
             city = b.other2,
+            
             company = new CompanyDTO()
             {
                 companyID = b.company.Id,
@@ -493,6 +521,7 @@ namespace EdubranApi.Controllers
             }
 
             Company company = await db.Companies.FirstAsync(b => b.registrationId == reg);
+            
             int company_id = company.Id;
 
             Project project = new Project()
@@ -509,6 +538,34 @@ namespace EdubranApi.Controllers
                 other1 = project_data.remuneration,
                 other2 = project_data.city
             };
+            if (project_data.due_date != null)
+            {
+                Int32 timeStamp;
+                Int32 closing;
+                DateTime dueDate;
+                try
+                {
+                    timeStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                    dueDate = DateTime.ParseExact(project_data.due_date, "MM/dd/yyyy", System.Globalization.CultureInfo.InvariantCulture).ToUniversalTime();
+                    closing = (Int32)(dueDate.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+                    TimeSpan span = dueDate.Subtract(DateTime.UtcNow);
+                    if (span.Days < 1)
+                    {
+                        return StatusCode(HttpStatusCode.Forbidden);
+                    }
+                    else
+                    {
+                        project.closingDate = closing;
+                    }
+                   
+                }
+                catch (Exception e)
+                {
+
+                    return StatusCode(HttpStatusCode.ExpectationFailed);
+                }
+            }
 
             Project original_project = await db.Projects.FindAsync(id);
             if (original_project.company.Id != company_id)

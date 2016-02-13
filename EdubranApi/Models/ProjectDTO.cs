@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -23,7 +24,10 @@ namespace EdubranApi.Models
         public int time_minutes { get; set; }
         public int time_hours { get; set; }
         public int time_days { get; set; }
+       // place holder
         public Int32 timestamp { get; set; }
+        public string posted_date { get; set; }
+        public string due_date { get; set; }
 
         /// <summary>
         /// Project salary if applicable

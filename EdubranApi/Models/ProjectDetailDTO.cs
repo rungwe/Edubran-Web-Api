@@ -27,7 +27,7 @@ namespace EdubranApi.Models
         public int time_minutes { get; set; }
         public int time_hours { get; set; }
         public int time_days {get; set;}
-
+        
         /// <summary>
         /// Project salary if applicable
         /// </summary>

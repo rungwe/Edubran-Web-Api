@@ -40,6 +40,7 @@ namespace EdubranApi.Controllers
                                Id = b.Id,
                                comment = b.comment,
                                date = b.date,
+                               timestamp = b.time,
                                client = new ClientDTO()
                                {
                                    clientId = b.clientId,
@@ -48,7 +49,19 @@ namespace EdubranApi.Controllers
                                    type = b.type
                                }
                            };
-            return comments;
+            List<CommentDTO> list = comments.ToList();
+            foreach (CommentDTO pr in list)
+            {
+                TimeSpan sp = span(pr.timestamp);
+                pr.time_days = sp.Days;
+                pr.time_hours = sp.Hours;
+                pr.time_minutes = sp.Minutes;
+                pr.time_seconds = sp.Seconds;
+
+            }
+
+            return list.AsQueryable();
+
         }
 
         // GET: api/Feedbacks/5
@@ -133,6 +146,8 @@ namespace EdubranApi.Controllers
             Student student = await db.Students.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
             Company company = await db.Companies.Where(d => d.registrationId == reg).SingleOrDefaultAsync();
             Feedback b;
+            Int32 timeStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            DateTime date = DateTime.UtcNow;
             if (student != null)
             {
                 string middle_name = student.middleName;
@@ -140,18 +155,23 @@ namespace EdubranApi.Controllers
                 {
                     middle_name="";
                 }
+                 
                 Feedback feedback = new Feedback()
                 {
                     projectId = comment.project_id,
                     comment = comment.comment,
                     clientId = student.Id,
                     type= "student",
-                    date = "today",
+                    date = ""+date.Month+""+date.Day+""+date.Year,
                     name = student.firstName +" "+middle_name+" "+ student.lastName,
-                    profile_picture = student.profilePic
+                    profile_picture = student.profilePic,
+                    time =timeStamp
                     
                 };
                 b= db.Feedbacks.Add(feedback);
+
+                //return comment to client
+
                 await db.SaveChangesAsync();
                 CommentDTO new_comment = new CommentDTO
                 {
@@ -179,8 +199,8 @@ namespace EdubranApi.Controllers
                     name = company.companyName,
                     profile_picture = company.profilePicture,
                     type = "company",
-                    date = "today",
-                    
+                    date = "" + date.Month + "" + date.Day + "" + date.Year,
+                    time = timeStamp
                 };
                 b = db.Feedbacks.Add(feedback);
                 await db.SaveChangesAsync();
@@ -263,6 +283,15 @@ namespace EdubranApi.Controllers
         private bool FeedbackExists(int id)
         {
             return db.Feedbacks.Count(e => e.Id == id) > 0;
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        private TimeSpan span(Int32 timestamp)
+        {
+            DateTime posted = new DateTime(1970, 1, 1).AddSeconds(timestamp).ToUniversalTime();
+            TimeSpan span = DateTime.UtcNow.Subtract(posted);
+
+            return span;
         }
     }
 }
