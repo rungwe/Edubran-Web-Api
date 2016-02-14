@@ -30,6 +30,7 @@ namespace EdubranApi.Controllers
         private const string LocalLoginProvider = "Local";
         private ApplicationUserManager _userManager;
         private EdubranApiContext db = new EdubranApiContext();
+        private ApplicationDbContext admin = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -465,6 +466,80 @@ namespace EdubranApi.Controllers
             }
 
 
+        }
+
+        /// <summary>
+        /// Get the password recovery token
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        /// 
+        [AllowAnonymous]
+        [ResponseType(typeof(RecoveryDTO))]
+        [Route("PasswordToken")]
+        [HttpPost]
+        public async Task<IHttpActionResult> password_token(RecoveryEmailDTO data)
+        {
+            //ApplicationUser user = await admin.Users.Where(b => b.UserName == username).SingleOrDefaultAsync();
+            string user_id ="";
+            Student stu = await db.Students.Where(c => c.email == data.username).SingleOrDefaultAsync();
+            Company comp = await db.Companies.Where(d => d.email == data.username).SingleOrDefaultAsync();
+            if (stu != null)
+            {
+                user_id = stu.registrationId;
+            }
+            if (comp != null){
+                user_id = comp.registrationId;
+            }
+
+            if (user_id == "")
+            {
+                return StatusCode(HttpStatusCode.NotFound);
+            }
+            
+            string code = await UserManager.GeneratePasswordResetTokenAsync(user_id);
+
+            return Ok(new RecoveryDTO { passwordRecoveryToken= code});
+        }
+
+        /// <summary>
+        /// Set the new password, recovery token is needed, first run the PasswordToken endpoint to get the recovery token
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [ResponseType(typeof(void))]
+        [Route("RecoverPassword")]
+        [HttpPost]
+        public async Task<IHttpActionResult> recover_password(RecoveryNewPassword data)
+        {
+            string user_id = "";
+            Student stu = await db.Students.Where(c => c.email == data.username).SingleOrDefaultAsync();
+            Company comp = await db.Companies.Where(d => d.email == data.username).SingleOrDefaultAsync();
+            if (stu != null)
+            {
+                user_id = stu.registrationId;
+            }
+            if (comp != null)
+            {
+                user_id = comp.registrationId;
+            }
+
+            if (user_id == "")
+            {
+                return StatusCode(HttpStatusCode.NotFound);
+            }
+
+            IdentityResult operation = await UserManager.ResetPasswordAsync(user_id,data.passwordToken, data.newPassword);
+            if (operation.Succeeded)
+            {
+                return Ok();
+            }
+            else {
+                return StatusCode(HttpStatusCode.ExpectationFailed);
+            }
+            
+            
         }
 
         // POST api/Account/RegisterExternal

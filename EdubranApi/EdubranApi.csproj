@@ -306,6 +306,9 @@
     <Compile Include="Models\ProjectDTO.cs" />
     <Compile Include="Models\ProjectEditDTO.cs" />
     <Compile Include="Models\ProjectPostDTO.cs" />
+    <Compile Include="Models\RecoveryDTO.cs" />
+    <Compile Include="Models\RecoveryEmailDTO.cs" />
+    <Compile Include="Models\RecoveryNewPassword.cs" />
     <Compile Include="Models\Skill.cs" />
     <Compile Include="Models\SkillDTO.cs" />
     <Compile Include="Models\Student.cs" />
