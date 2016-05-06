@@ -542,6 +542,35 @@ namespace EdubranApi.Controllers
             
         }
 
+        [AllowAnonymous]
+        [ResponseType(typeof(void))]
+        [Route("CheckUsernameAvailability")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CheckUsernameAvailability(RecoveryEmailDTO data)
+        {
+            bool check = false;
+            Student stu = await db.Students.Where(c => c.email == data.username).SingleOrDefaultAsync();
+            Company comp = await db.Companies.Where(d => d.email == data.username).SingleOrDefaultAsync();
+            if (stu != null)
+            {
+                check = true;
+            }
+            if (comp != null)
+            {
+                check = true;
+            }
+
+            if (check)
+            {
+                return StatusCode(HttpStatusCode.NotAcceptable);
+            }
+            else
+            {
+                return Ok();
+            }
+        }
+
+
         // POST api/Account/RegisterExternal
         [ApiExplorerSettings(IgnoreApi = true)]
         [OverrideAuthentication]

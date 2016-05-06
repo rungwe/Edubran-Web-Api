@@ -31,8 +31,8 @@ namespace EdubranApi
                 RequiredLength = 6,
                 RequireNonLetterOrDigit = false,
                 RequireDigit = false,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)

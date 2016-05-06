@@ -94,7 +94,8 @@ namespace EdubranApi.Controllers
             {
                 return null;
             }
-            var project = from b in db.Projects.Include(b => b.company).Where(b => b.category == client.category && b.audience <= client.level)
+            Int32 timeStamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            var project = from b in db.Projects.Include(b => b.company).Where(b => b.category == client.category && b.audience <= client.level && b.closingDate>timeStamp)
                           select new ProjectDTO
                           {
                               project_id = b.Id,
