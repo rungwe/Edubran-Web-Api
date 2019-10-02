@@ -43,7 +43,7 @@ namespace EdubranApi.Controllers
                                profile_pic = b.profilePic,
                                wall_paper = b.wallpaper,
                                category = b.category,
-                               instituiton=b.institute,
+                               institution=b.institute,
                                gender = b.gender,
                                level = b.level
                            };
@@ -69,7 +69,7 @@ namespace EdubranApi.Controllers
                                profile_pic = b.profilePic,
                                wall_paper = b.wallpaper,
                                category = b.category,
-                               instituiton = b.institute,
+                               institution = b.institute,
                                gender = b.gender,
                                level = b.level
                            };
@@ -103,7 +103,7 @@ namespace EdubranApi.Controllers
                 profile_pic = b.profilePic,
                 wall_paper = b.wallpaper,
                 category = b.category,
-                instituiton = b.institute,
+                institution = b.institute,
                 level = b.level,
                 curriculum_vitae = b.cv,
                 linkdn_url = b.linkdn,
@@ -154,7 +154,7 @@ namespace EdubranApi.Controllers
                     profile_pic = b.profilePic,
                     wall_paper = b.wallpaper,
                     category = b.category,
-                    instituiton = b.institute,
+                    institution = b.institute,
                     level = b.level,
                     curriculum_vitae = b.cv,
                     linkdn_url = b.linkdn,
@@ -209,7 +209,7 @@ namespace EdubranApi.Controllers
                 lastName = profile.last_name,
                 level = profile.level,
                 category= profile.category,
-                institute= profile.instituiton,
+                institute= profile.institution,
                 phone = profile.phone_number,
                 wallpaper = profile.wall_paper,
                 linkdn = profile.linkdn_url,
